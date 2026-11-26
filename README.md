@@ -72,7 +72,7 @@ The application uses Flyway to create the schema and load synthetic development 
 
 ### Start with an empty MySQL database
 
-1. Install and start MySQL 8.0+.
+1. Install and start MySQL 8.0.16+ (để các CHECK constraints trong V1 được thực thi).
 2. Copy `.env.example` to `.env` if you use a dotenv loader, or export the variables in your shell. Set `DB_PASSWORD` to your local MySQL password. The application itself reads environment variables.
 3. The default JDBC URL includes `createDatabaseIfNotExist=true`, so MySQL creates the configured database if the DB user has permission.
 4. Run:

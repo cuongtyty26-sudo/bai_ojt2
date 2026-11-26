@@ -107,7 +107,7 @@ Expected counts after the first successful migration: 19 users (1 admin + 3 recr
 | RECRUITER / Partner 1 | `recruiter1@demo.local` |
 | RECRUITER / Partner 2 | `recruiter2@demo.local` |
 | RECRUITER / Partner 3 | `recruiter3@demo.local` |
-| CANDIDATE | `candidate01@demo.local` through `candidate15@demo.local` |
+| CANDIDATE | `candidate01@demo.local` through `candidate15@demo.local` (15 separate fictional accounts) |
 
 The password is stored as a BCrypt hash in the seed migration. Change or remove all demo credentials before any deployment beyond local development.
 

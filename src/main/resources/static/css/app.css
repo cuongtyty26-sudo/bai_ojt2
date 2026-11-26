@@ -1,0 +1,6 @@
+html, body { min-height: 100%; }
+body { min-height: 100vh; background-color: #f8f9fa; }
+.app-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.app-shell main { width: 100%; }
+.navbar-brand { letter-spacing: 0.02em; }
+.card { border-color: #e9ecef; box-shadow: 0 0.125rem 0.35rem rgba(0, 0, 0, 0.04); }

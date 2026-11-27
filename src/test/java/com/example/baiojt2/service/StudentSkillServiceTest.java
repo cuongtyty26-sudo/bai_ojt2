@@ -39,7 +39,7 @@ class StudentSkillServiceTest {
     void setUp() {
         profile = new StudentProfile(10L, "Student");
         ReflectionTestUtils.setField(profile, "id", 20L);
-        when(profileRepository.findByUserId(10L)).thenReturn(Optional.of(profile));
+        lenient().when(profileRepository.findByUserId(10L)).thenReturn(Optional.of(profile));
     }
 
     @Test

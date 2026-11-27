@@ -335,3 +335,14 @@ Configure a persistent private directory on the server before deployment; do not
 ```bash
 ./mvnw clean test
 ```
+
+
+## Student profile avatar (T4E7A6A)
+
+- Students upload or replace their avatar from `/me/profile`; accepted formats are JPG/JPEG and PNG, with a maximum size of 2 MiB.
+- Plain JavaScript validates the selected file's extension, browser-reported image MIME type and size, then previews it locally with `URL.createObjectURL` before the upload is submitted. The server independently validates extension, Content-Type, size and image magic bytes; client-side checks are not a security boundary.
+- Images are stored outside public static resources in `./uploads/avatars` by default. Set `AVATAR_UPLOAD_DIR` to use a persistent private directory. Stored names are random UUID-derived names; original filenames are not used as storage paths.
+- Replacing an avatar saves the new file and metadata, then deletes the old image after the database transaction commits. The profile is scoped to the authenticated student; `GET /me/avatar` serves only that student's image with `Cache-Control: no-store` and `X-Content-Type-Options: nosniff`.
+- If no avatar exists, the profile shows a circular placeholder containing the first letter of the student's name.
+- Flyway V10 adds nullable avatar filename and content-type columns to `profiles`; existing migrations are unchanged.
+- Run `./mvnw clean test` and verify V10 against the local MySQL database before merging.

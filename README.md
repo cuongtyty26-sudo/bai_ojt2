@@ -189,3 +189,28 @@ if (alreadyExists) {
 ```
 
 The shared alert fragment already displays `successMessage` and `errorMessage`; no page-specific alert markup is needed. Do not put SQL, stack traces, passwords, tokens or internal exception details in a `BusinessException` message.
+
+
+## Authentication and authorization (T4E7A60)
+
+### Login
+- The custom login page is `/login` and authenticates by email + BCrypt password.
+- Authentication uses the HTTP session; session fixation protection migrates the session after login.
+- The optional `remember-me` checkbox creates a signed remember-me cookie valid for 14 days.
+- Logout is a POST request to `/logout`, invalidates the session and deletes the session/remember-me cookies.
+- CSRF remains enabled (Spring Security default, explicitly configured). Thymeleaf forms that submit POST requests must use `th:action` so the CSRF token is included.
+
+### Roles and landing pages
+- `ADMIN`: only `/admin/**`, landing page `/admin/`.
+- `PARTNER`: only `/partner/**`, landing page `/partner/`.
+- `STUDENT`: only `/me/**`, landing page `/me/`.
+- Flyway migration `V3__rename_account_roles.sql` changes existing `RECRUITER` accounts to `PARTNER` and `CANDIDATE` accounts to `STUDENT` without deleting users.
+- Accounts with `is_locked = true` cannot authenticate. Non-ACTIVE account statuses are also denied and the login page explains whether the account is pending, rejected, suspended or locked.
+
+### Demo accounts
+All accounts seeded by V2 use password `Demo@12345`:
+- Admin: `admin@demo.local`
+- Partner: `recruiter1@demo.local`, `recruiter2@demo.local`, `recruiter3@demo.local`
+- Student: `candidate01@demo.local` through `candidate15@demo.local`
+
+Set `SECURITY_REMEMBER_ME_KEY` to a long, random secret in deployed environments. The fallback value in application properties is for local development only.

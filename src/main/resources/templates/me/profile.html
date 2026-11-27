@@ -160,6 +160,60 @@
                 </div>
             </section>
 
+            <section class="card shadow-sm mt-4">
+                <div class="card-body p-4">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div>
+                            <h2 class="h4 mb-1">Dự án của tôi</h2>
+                            <p class="text-muted mb-0">
+                                <span th:text="${projectCount}">0</span>/20 dự án
+                                · Còn <span th:text="${remainingProjectSlots}">20</span> lượt thêm
+                            </p>
+                        </div>
+                        <a th:if="${remainingProjectSlots > 0}" class="btn btn-primary"
+                           th:href="@{/me/projects/new}">Thêm dự án</a>
+                        <button th:if="${remainingProjectSlots == 0}" class="btn btn-secondary" disabled>
+                            Đã đạt giới hạn 20 dự án
+                        </button>
+                    </div>
+
+                    <div th:if="${#lists.isEmpty(studentProjects)}" class="text-muted text-center py-4">
+                        Bạn chưa thêm dự án nào.
+                    </div>
+
+                    <article th:each="project : ${studentProjects}" class="border rounded p-3 mb-3">
+                        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                            <div>
+                                <h3 class="h5 mb-1" th:text="${project.name}">Tên dự án</h3>
+                                <div class="text-muted small">
+                                    Vai trò: <strong th:text="${project.role}">Developer</strong>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a class="btn btn-sm btn-outline-primary"
+                                   th:href="@{/me/projects/{id}/edit(id=${project.id})}">Sửa</a>
+                                <form th:action="@{/me/projects/{id}/delete(id=${project.id})}" method="post"
+                                      onsubmit="return confirm('Bạn có chắc muốn xóa dự án này khỏi hồ sơ?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Xóa</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <span class="fw-semibold small">Công nghệ:</span>
+                            <span th:text="${project.technologies}">Java, Spring Boot, MySQL</span>
+                        </div>
+                        <div class="mt-2 d-flex flex-wrap gap-3">
+                            <a th:href="${project.githubUrl}" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+                            <a th:if="${project.demoUrl != null and !#strings.isEmpty(project.demoUrl)}"
+                               th:href="${project.demoUrl}" target="_blank" rel="noopener noreferrer">Demo ↗</a>
+                        </div>
+                        <p th:if="${project.description != null and !#strings.isEmpty(project.description)}"
+                           class="mb-0 mt-3 text-break" style="white-space: pre-line"
+                           th:text="${project.description}">Mô tả dự án</p>
+                    </article>
+                </div>
+            </section>
+
         </div>
     </div>
     <script>

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.NoSuchElementException;
 
@@ -28,6 +29,13 @@ public class GlobalExceptionHandler {
     public ModelAndView handleNotFoundException() {
         return errorPage("error/404", HttpStatus.NOT_FOUND,
                 "Không tìm thấy dữ liệu bạn yêu cầu.");
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public String handleMaxUploadSizeExceeded(RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("errorMessage",
+                "File minh chứng vượt quá dung lượng tối đa 5 MB.");
+        return "redirect:/me/certificates/new";
     }
 
     @ExceptionHandler(Exception.class)

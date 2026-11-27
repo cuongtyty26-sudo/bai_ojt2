@@ -51,3 +51,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Private uploaded certificate evidence
+/uploads/

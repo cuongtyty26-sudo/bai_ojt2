@@ -4,6 +4,8 @@ import com.example.baiojt2.dto.StudentProfileForm;
 import com.example.baiojt2.dto.StudentSkillForm;
 import com.example.baiojt2.dto.StudentSkillView;
 import com.example.baiojt2.entity.StudentProject;
+import com.example.baiojt2.entity.StudentCertificate;
+import com.example.baiojt2.service.StudentCertificateService;
 import com.example.baiojt2.service.StudentProjectService;
 import com.example.baiojt2.entity.SkillCategory;
 import com.example.baiojt2.entity.SkillProficiencyLevel;
@@ -31,13 +33,16 @@ public class StudentProfileController {
     private final StudentProfileService profileService;
     private final StudentSkillService studentSkillService;
     private final StudentProjectService studentProjectService;
+    private final StudentCertificateService studentCertificateService;
 
     public StudentProfileController(StudentProfileService profileService,
                                     StudentSkillService studentSkillService,
-                                    StudentProjectService studentProjectService) {
+                                    StudentProjectService studentProjectService,
+                                    StudentCertificateService studentCertificateService) {
         this.profileService = profileService;
         this.studentSkillService = studentSkillService;
         this.studentProjectService = studentProjectService;
+        this.studentCertificateService = studentCertificateService;
     }
 
     @GetMapping("/me/profile")
@@ -45,6 +50,7 @@ public class StudentProfileController {
         model.addAttribute("profileForm", profileService.getMyProfile(account.getId()));
         addSkillData(account, model);
         addProjectData(account, model);
+        addCertificateData(account, model);
         return "me/profile";
     }
 
@@ -57,12 +63,18 @@ public class StudentProfileController {
         if (bindingResult.hasErrors()) {
             addSkillData(account, model);
             addProjectData(account, model);
+            addCertificateData(account, model);
             return "me/profile";
         }
 
         profileService.updateMyProfile(account.getId(), form);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật hồ sơ thành công.");
         return "redirect:/me/profile";
+    }
+
+    private void addCertificateData(UserAccount account, Model model) {
+        List<StudentCertificate> certificates = studentCertificateService.findMine(account.getId());
+        model.addAttribute("studentCertificates", certificates);
     }
 
     private void addProjectData(UserAccount account, Model model) {

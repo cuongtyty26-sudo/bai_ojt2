@@ -316,3 +316,22 @@ Run checks:
 ```bash
 ./mvnw clean test
 ```
+
+
+## Student certificate evidence uploads (T4E7A69)
+
+- Students add certificates from `/me/profile`: certificate name, issuer, issue date and a required multipart evidence file.
+- Accepted file types: PDF (`.pdf` + `application/pdf`), JPEG (`.jpg`/`.jpeg` + `image/jpeg`) and PNG (`.png` + `image/png`). The server validates the extension, request Content-Type, maximum 5 MiB size and the file signature (magic bytes); the browser `accept` attribute is only a convenience, not a security check.
+- The stored filename is a random 32-character UUID-derived value plus the validated extension. The original filename is retained only as display/download metadata.
+- Files are stored outside `static/` in a configurable private directory. Default: `./uploads/certificates`; override with `CERTIFICATE_UPLOAD_DIR`. The directory is excluded from Git by `.gitignore`.
+- Multipart limits: max file size 5 MB and max request size 6 MB to allow multipart headers/boundaries. Oversized requests return a friendly flash message.
+- Students can view/download/delete only certificates belonging to their authenticated profile. Admin-only routes `/admin/certificates/{id}/view` and `/admin/certificates/{id}/download` allow administrators to access evidence. Existing SecurityConfig restricts `/admin/**` to `ROLE_ADMIN` and `/me/**` to `ROLE_STUDENT`.
+- Delete removes both the certificate database row and its stored evidence file. File responses use the validated stored content type, safe Content-Disposition and `X-Content-Type-Options: nosniff`.
+- Flyway V9 adds evidence metadata columns to the existing `certificates` table; V1–V8 are not modified.
+- Routes: `GET /me/certificates/new`, `POST /me/certificates`, `POST /me/certificates/{id}/delete`, `GET /me/certificates/{id}/view`, and `GET /me/certificates/{id}/download`.
+
+Configure a persistent private directory on the server before deployment; do not use a public web root or commit uploaded files. Run:
+
+```bash
+./mvnw clean test
+```

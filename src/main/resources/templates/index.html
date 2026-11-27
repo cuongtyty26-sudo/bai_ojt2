@@ -12,25 +12,25 @@
         </div>
     </div>
     <div class="row g-3">
-        <div class="col-md-4" sec:authorize="hasRole('CANDIDATE')">
+        <div class="col-md-4" sec:authorize="hasRole('STUDENT')">
             <div class="card h-100"><div class="card-body">
                 <h2 class="h5">Hồ sơ của tôi</h2>
                 <p class="text-secondary">Cập nhật thông tin học vấn, kỹ năng và dự án.</p>
-                <a class="btn btn-primary" th:href="@{/candidate/profile}">Mở hồ sơ</a>
+                <a class="btn btn-primary" th:href="@{/me/}">Mở hồ sơ</a>
             </div></div>
         </div>
-        <div class="col-md-4" sec:authorize="hasRole('RECRUITER')">
+        <div class="col-md-4" sec:authorize="hasRole('PARTNER')">
             <div class="card h-100"><div class="card-body">
                 <h2 class="h5">Tìm ứng viên</h2>
                 <p class="text-secondary">Tìm kiếm và lưu hồ sơ ứng viên phù hợp.</p>
-                <a class="btn btn-primary" th:href="@{/recruiter/candidates}">Tìm ứng viên</a>
+                <a class="btn btn-primary" th:href="@{/partner/}">Tìm ứng viên</a>
             </div></div>
         </div>
         <div class="col-md-4" sec:authorize="hasRole('ADMIN')">
             <div class="card h-100"><div class="card-body">
                 <h2 class="h5">Quản trị hệ thống</h2>
                 <p class="text-secondary">Quản lý tài khoản và xử lý hồ sơ chờ duyệt.</p>
-                <a class="btn btn-primary" th:href="@{/admin/reviews}">Mở hàng chờ duyệt</a>
+                <a class="btn btn-primary" th:href="@{/admin/}">Mở hàng chờ duyệt</a>
             </div></div>
         </div>
         <div class="col-12" sec:authorize="isAnonymous()">

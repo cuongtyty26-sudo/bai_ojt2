@@ -23,4 +23,4 @@ jobs:
           java-version: '17'
           cache: maven
       - name: Run Maven test suite
-        run: mvn --batch-mode --no-transfer-progress clean test
+        run: ./mvnw --batch-mode --no-transfer-progress clean test

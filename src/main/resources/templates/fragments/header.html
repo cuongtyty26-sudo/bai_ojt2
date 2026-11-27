@@ -8,19 +8,19 @@
 <div class="collapse navbar-collapse" id="mainNavbar">
 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 <li class="nav-item"><a class="nav-link" th:href="@{/}">Trang chủ</a></li>
-<li class="nav-item" sec:authorize="hasRole('CANDIDATE')"><a class="nav-link" th:href="@{/candidate/profile}">Hồ sơ của tôi</a></li>
-<li class="nav-item" sec:authorize="hasRole('CANDIDATE')"><a class="nav-link" th:href="@{/candidate/interviews}">Lời mời phỏng vấn</a></li>
-<li class="nav-item" sec:authorize="hasRole('RECRUITER')"><a class="nav-link" th:href="@{/recruiter/candidates}">Tìm ứng viên</a></li>
-<li class="nav-item" sec:authorize="hasRole('RECRUITER')"><a class="nav-link" th:href="@{/recruiter/shortlists}">Ứng viên đã lưu</a></li>
-<li class="nav-item" sec:authorize="hasRole('RECRUITER')"><a class="nav-link" th:href="@{/recruiter/interviews}">Yêu cầu phỏng vấn</a></li>
+<li class="nav-item" sec:authorize="hasRole('STUDENT')"><a class="nav-link" th:href="@{/me/profile}">Hồ sơ của tôi</a></li>
+<li class="nav-item" sec:authorize="hasRole('STUDENT')"><a class="nav-link" th:href="@{/me/interviews}">Lời mời phỏng vấn</a></li>
+<li class="nav-item" sec:authorize="hasRole('PARTNER')"><a class="nav-link" th:href="@{/partner/candidates}">Tìm ứng viên</a></li>
+<li class="nav-item" sec:authorize="hasRole('PARTNER')"><a class="nav-link" th:href="@{/partner/shortlists}">Ứng viên đã lưu</a></li>
+<li class="nav-item" sec:authorize="hasRole('PARTNER')"><a class="nav-link" th:href="@{/partner/interviews}">Yêu cầu phỏng vấn</a></li>
 <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link" th:href="@{/admin/users}">Quản trị tài khoản</a></li>
 <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link" th:href="@{/admin/reviews}">Hàng chờ duyệt</a></li>
 </ul>
 <div class="d-flex align-items-lg-center gap-3">
 <div sec:authorize="isAuthenticated()" class="text-white small">Xin chào, <strong sec:authentication="name">username</strong>
 <span class="badge bg-info text-dark ms-1" sec:authorize="hasRole('ADMIN')">ADMIN</span>
-<span class="badge bg-primary ms-1" sec:authorize="hasRole('RECRUITER')">RECRUITER</span>
-<span class="badge bg-success ms-1" sec:authorize="hasRole('CANDIDATE')">CANDIDATE</span></div>
+<span class="badge bg-primary ms-1" sec:authorize="hasRole('PARTNER')">PARTNER</span>
+<span class="badge bg-success ms-1" sec:authorize="hasRole('STUDENT')">STUDENT</span></div>
 <a class="btn btn-outline-light btn-sm" sec:authorize="isAnonymous()" th:href="@{/login}">Đăng nhập</a>
 <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" class="m-0"><button class="btn btn-outline-light btn-sm" type="submit">Đăng xuất</button></form>
 </div></div></div></nav>

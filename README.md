@@ -298,3 +298,21 @@ Run checks:
 ```bash
 ./mvnw clean test
 ```
+
+
+## Student project portfolio (T4E7A68)
+
+- Students manage projects from the `/me/profile` page: add, edit and delete their own projects.
+- Each project includes a required name, role, technologies used, valid HTTPS GitHub URL, optional valid HTTPS demo URL and optional description.
+- GitHub and demo links open in a new tab with `target="_blank"` and `rel="noopener noreferrer"`.
+- A profile can contain at most 20 projects. The service checks the count inside a transaction while holding a pessimistic write lock on the student's profile row, preventing concurrent requests from exceeding the limit.
+- Project lookup, update and deletion are scoped by both project ID and the authenticated student's profile ID. No profile ID is accepted from the browser.
+- Flyway V8 adds role, technologies, GitHub URL and demo URL columns to the existing `projects` table. Legacy seeded projects remain valid without a GitHub URL; newly submitted projects require one through Bean Validation.
+- Routes: `GET /me/projects/new`, `POST /me/projects`, `GET /me/projects/{projectId}/edit`, `POST /me/projects/{projectId}`, and `POST /me/projects/{projectId}/delete`. All are protected by the existing `ROLE_STUDENT` rule and CSRF.
+- Unit tests cover project creation, the 20-project limit, optional demo URL normalization, ownership checks, update and delete.
+
+Run checks:
+
+```bash
+./mvnw clean test
+```

@@ -3,6 +3,8 @@ package com.example.baiojt2.controller;
 import com.example.baiojt2.dto.StudentProfileForm;
 import com.example.baiojt2.dto.StudentSkillForm;
 import com.example.baiojt2.dto.StudentSkillView;
+import com.example.baiojt2.entity.StudentProject;
+import com.example.baiojt2.service.StudentProjectService;
 import com.example.baiojt2.entity.SkillCategory;
 import com.example.baiojt2.entity.SkillProficiencyLevel;
 import com.example.baiojt2.entity.UserAccount;
@@ -28,17 +30,21 @@ public class StudentProfileController {
 
     private final StudentProfileService profileService;
     private final StudentSkillService studentSkillService;
+    private final StudentProjectService studentProjectService;
 
     public StudentProfileController(StudentProfileService profileService,
-                                    StudentSkillService studentSkillService) {
+                                    StudentSkillService studentSkillService,
+                                    StudentProjectService studentProjectService) {
         this.profileService = profileService;
         this.studentSkillService = studentSkillService;
+        this.studentProjectService = studentProjectService;
     }
 
     @GetMapping("/me/profile")
     public String showMyProfile(@AuthenticationPrincipal UserAccount account, Model model) {
         model.addAttribute("profileForm", profileService.getMyProfile(account.getId()));
         addSkillData(account, model);
+        addProjectData(account, model);
         return "me/profile";
     }
 
@@ -50,12 +56,20 @@ public class StudentProfileController {
                                   RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             addSkillData(account, model);
+            addProjectData(account, model);
             return "me/profile";
         }
 
         profileService.updateMyProfile(account.getId(), form);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật hồ sơ thành công.");
         return "redirect:/me/profile";
+    }
+
+    private void addProjectData(UserAccount account, Model model) {
+        List<StudentProject> projects = studentProjectService.findMyProjects(account.getId());
+        model.addAttribute("studentProjects", projects);
+        model.addAttribute("projectCount", projects.size());
+        model.addAttribute("remainingProjectSlots", studentProjectService.remainingSlots(account.getId()));
     }
 
     private void addSkillData(UserAccount account, Model model) {

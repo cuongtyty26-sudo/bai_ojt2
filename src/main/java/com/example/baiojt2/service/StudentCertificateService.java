@@ -39,7 +39,7 @@ public class StudentCertificateService {
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy hồ sơ."));
         CertificateFileStorageService.StoredCertificateFile stored = storageService.store(form.getEvidenceFile());
         try {
-            certificateRepository.save(new StudentCertificate(profile, form.getName().trim(),
+            certificateRepository.saveAndFlush(new StudentCertificate(profile, form.getName().trim(),
                     blankToNull(form.getIssuer()), form.getIssuedAt(), stored.originalName(),
                     stored.storedName(), stored.contentType(), stored.size()));
         } catch (RuntimeException ex) {

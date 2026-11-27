@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PostMapping;\nimport org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -42,7 +42,7 @@ public class StudentSkillController {
     @PostMapping("/me/skills/{skillId}")
     public String updateLevel(@AuthenticationPrincipal UserAccount account,
                               @PathVariable Long skillId,
-                              @ModelAttribute("proficiencyLevel") Integer proficiencyLevel,
+                              @RequestParam Integer proficiencyLevel,
                               RedirectAttributes redirectAttributes) {
         try {
             studentSkillService.updateLevel(account.getId(), skillId, proficiencyLevel);

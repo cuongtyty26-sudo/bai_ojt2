@@ -1,15 +1,9 @@
 package com.example.baiojt2.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -29,6 +23,8 @@ public class UserAccount implements UserDetails {
     private boolean locked;
     @Column(name = "account_status", nullable = false, length = 20)
     private String accountStatus;
+    @Column(name = "company_id")
+    private Long companyId;
 
     protected UserAccount() {}
     public UserAccount(String email, String passwordHash, String role, boolean locked, String accountStatus) {
@@ -42,6 +38,9 @@ public class UserAccount implements UserDetails {
     public void changePasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     public String getRole() { return role; }
     public boolean isLocked() { return locked; }
+    public void setLocked(boolean locked) { this.locked = locked; }
+    public Long getCompanyId() { return companyId; }
+    public void setCompanyId(Long companyId) { this.companyId = companyId; }
     public String getAccountStatus() { return accountStatus; }
     @Override public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase(Locale.ROOT)));

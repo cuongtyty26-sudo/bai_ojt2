@@ -71,8 +71,114 @@
                     <button type="submit" class="btn btn-primary">Lưu hồ sơ</button>
                 </div>
             </form>
+
+            <section class="card shadow-sm mt-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                        <div>
+                            <h2 class="h4 mb-1">Kỹ năng của tôi</h2>
+                            <p class="text-muted mb-0">Chọn kỹ năng từ danh mục và tự đánh giá mức độ thành thạo.</p>
+                        </div>
+                    </div>
+
+                    <form th:action="@{/me/skills}" th:object="${studentSkillForm}" method="post"
+                          class="border rounded p-3 mb-4">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-lg-6">
+                                <label for="skillSearch" class="form-label">Tìm nhanh kỹ năng</label>
+                                <input id="skillSearch" type="search" class="form-control mb-2"
+                                       placeholder="Gõ tên kỹ năng để lọc...">
+                                <select id="skillId" th:field="*{skillId}" class="form-select" required>
+                                    <option value="">-- Chọn kỹ năng --</option>
+                                    <option th:each="option : ${availableSkills}"
+                                            th:value="${option.id}"
+                                            th:text="|[${option.categoryLabel}] ${option.name}|"></option>
+                                </select>
+                                <div class="form-text" th:if="${#lists.isEmpty(availableSkills)}">
+                                    Không còn kỹ năng đang hiển thị nào để chọn.
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="proficiencyLevel" class="form-label">Mức tự đánh giá</label>
+                                <select id="proficiencyLevel" th:field="*{proficiencyLevel}" class="form-select" required>
+                                    <option value="">-- Chọn mức 1–5 --</option>
+                                    <option th:each="level : ${skillProficiencyLevels}"
+                                            th:value="${level.value}"
+                                            th:text="|Mức ${level.value} – ${level.label}|"></option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 d-grid">
+                                <button type="submit" class="btn btn-primary"
+                                        th:disabled="${#lists.isEmpty(availableSkills)}">Thêm kỹ năng</button>
+                            </div>
+                        </div>
+                        <div class="mt-3 small">
+                            <div th:each="level : ${skillProficiencyLevels}" class="mb-1">
+                                <strong th:text="|Mức ${level.value} – ${level.label}:|">Mức 1</strong>
+                                <span th:text="${level.description}">Mô tả mức độ</span>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div th:each="category : ${skillCategories}" class="mb-4">
+                        <h3 class="h6 fw-bold border-bottom pb-2"
+                            th:text="${category.label}">Ngôn ngữ</h3>
+                        <div th:if="${#lists.isEmpty(studentSkillGroups[category])}" class="text-muted small mb-3">
+                            Chưa có kỹ năng trong nhóm này.
+                        </div>
+                        <div th:each="skill : ${studentSkillGroups[category]}"
+                             class="border rounded p-3 mb-2">
+                            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+                                <div class="flex-grow-1">
+                                    <div class="fw-semibold" th:text="${skill.skillName}">Java</div>
+                                    <div class="small text-muted mt-1">
+                                        <span th:text="|Mức ${skill.proficiencyLevel} – ${skill.levelLabel}|">Mức 3</span>
+                                        <span> · </span>
+                                        <span th:text="${skill.levelDescription}">Mô tả</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-wrap align-items-center gap-2">
+                                    <form th:action="@{/me/skills/{id}(id=${skill.skillId})}" method="post"
+                                          class="d-flex gap-2 align-items-center">
+                                        <select name="proficiencyLevel" class="form-select form-select-sm"
+                                                aria-label="Thay đổi mức kỹ năng">
+                                            <option th:each="level : ${skillProficiencyLevels}"
+                                                    th:value="${level.value}"
+                                                    th:selected="${level.value == skill.proficiencyLevel}"
+                                                    th:text="|Mức ${level.value}|"></option>
+                                        </select>
+                                        <button type="submit" class="btn btn-sm btn-outline-primary">Cập nhật mức</button>
+                                    </form>
+                                    <form th:action="@{/me/skills/{id}/remove(id=${skill.skillId})}" method="post"
+                                          onsubmit="return confirm('Bạn có chắc muốn bỏ kỹ năng này khỏi hồ sơ?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Bỏ kỹ năng</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const search = document.getElementById('skillSearch');
+            const select = document.getElementById('skillId');
+            if (!search || !select) return;
+            search.addEventListener('input', function () {
+                const keyword = this.value.trim().toLocaleLowerCase();
+                Array.from(select.options).forEach(function (option, index) {
+                    if (index === 0) return;
+                    option.hidden = !option.text.toLocaleLowerCase().includes(keyword);
+                });
+                if (select.selectedOptions.length && select.selectedOptions[0].hidden) {
+                    select.value = '';
+                }
+            });
+        });
+    </script>
 </section>
 </body>
 </html>

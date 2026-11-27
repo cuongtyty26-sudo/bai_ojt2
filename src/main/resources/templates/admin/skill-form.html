@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Thông tin kỹ năng', ~{::content})}">
+<body>
+<section th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <h1 class="h3 mb-4" th:text="${formTitle}">Thông tin kỹ năng</h1>
+            <form th:action="${formAction}" th:object="${skillForm}" method="post" class="card shadow-sm">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Tên kỹ năng <span class="text-danger">*</span></label>
+                        <input id="name" type="text" th:field="*{name}"
+                               th:classappend="${#fields.hasErrors('name')} ? ' is-invalid' : ''"
+                               class="form-control" maxlength="100" required
+                               placeholder="Ví dụ: Java, Spring Boot, MySQL">
+                        <div class="invalid-feedback" th:errors="*{name}"></div>
+                        <div class="form-text">Tên kỹ năng không được trùng, kể cả khi khác chữ hoa/chữ thường.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Nhóm kỹ năng <span class="text-danger">*</span></label>
+                        <select id="category" th:field="*{category}"
+                                th:classappend="${#fields.hasErrors('category')} ? ' is-invalid' : ''"
+                                class="form-select" required>
+                            <option value="">-- Chọn nhóm --</option>
+                            <option th:each="category : ${categories}"
+                                    th:value="${category}" th:text="${category.label}">Ngôn ngữ</option>
+                        </select>
+                        <div class="invalid-feedback" th:errors="*{category}"></div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white d-flex justify-content-end gap-2 p-3">
+                    <a class="btn btn-outline-secondary" th:href="@{/admin/skills}">Hủy</a>
+                    <button type="submit" class="btn btn-primary">Lưu kỹ năng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

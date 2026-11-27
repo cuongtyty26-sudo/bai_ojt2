@@ -13,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Objects;
+
 @Controller
 public class PasswordManagementController {
     private final PasswordManagementService service;
@@ -28,9 +30,8 @@ public class PasswordManagementController {
     public String changePassword(@Valid @ModelAttribute("changePasswordForm") ChangePasswordForm form,
                                  BindingResult result, @AuthenticationPrincipal UserAccount user,
                                  RedirectAttributes redirect) {
-        if (!form.getNewPassword().equals(form.getConfirmPassword())) {
+        if (!Objects.equals(form.getNewPassword(), form.getConfirmPassword()))
             result.rejectValue("confirmPassword", "password.mismatch", "Mật khẩu xác nhận không khớp.");
-        }
         if (result.hasErrors()) { form.clearPasswords(); return "account/change-password"; }
         try {
             service.changePassword(user, form.getCurrentPassword(), form.getNewPassword());
@@ -54,9 +55,11 @@ public class PasswordManagementController {
                              BindingResult result, RedirectAttributes redirect) {
         if (result.hasErrors()) return "forgot-password";
         service.requestPasswordReset(form.getEmail());
+        ResetPasswordForm resetForm = new ResetPasswordForm();
+        resetForm.setEmail(form.getEmail().trim());
+        redirect.addFlashAttribute("resetPasswordForm", resetForm);
         redirect.addFlashAttribute("successMessage",
                 "Nếu email tồn tại, mã OTP đã được tạo. Trong môi trường demo, hãy kiểm tra log ứng dụng.");
-        redirect.addFlashAttribute("resetEmail", form.getEmail().trim());
         return "redirect:/reset-password";
     }
 
@@ -71,9 +74,8 @@ public class PasswordManagementController {
     @PostMapping("/reset-password")
     public String resetPassword(@Valid @ModelAttribute("resetPasswordForm") ResetPasswordForm form,
                                 BindingResult result, RedirectAttributes redirect) {
-        if (!form.getNewPassword().equals(form.getConfirmPassword())) {
+        if (!Objects.equals(form.getNewPassword(), form.getConfirmPassword()))
             result.rejectValue("confirmPassword", "password.mismatch", "Mật khẩu xác nhận không khớp.");
-        }
         if (result.hasErrors()) { form.clearPasswords(); return "reset-password"; }
         try {
             service.resetPassword(form.getEmail(), form.getOtp(), form.getNewPassword());

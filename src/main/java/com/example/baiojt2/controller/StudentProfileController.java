@@ -6,6 +6,7 @@ import com.example.baiojt2.dto.StudentSkillView;
 import com.example.baiojt2.entity.StudentProject;
 import com.example.baiojt2.entity.StudentCertificate;
 import com.example.baiojt2.service.StudentCertificateService;
+import com.example.baiojt2.service.StudentAvatarService;
 import com.example.baiojt2.service.StudentProjectService;
 import com.example.baiojt2.entity.SkillCategory;
 import com.example.baiojt2.entity.SkillProficiencyLevel;
@@ -34,20 +35,24 @@ public class StudentProfileController {
     private final StudentSkillService studentSkillService;
     private final StudentProjectService studentProjectService;
     private final StudentCertificateService studentCertificateService;
+    private final StudentAvatarService studentAvatarService;
 
     public StudentProfileController(StudentProfileService profileService,
                                     StudentSkillService studentSkillService,
                                     StudentProjectService studentProjectService,
-                                    StudentCertificateService studentCertificateService) {
+                                    StudentCertificateService studentCertificateService,
+                                    StudentAvatarService studentAvatarService) {
         this.profileService = profileService;
         this.studentSkillService = studentSkillService;
         this.studentProjectService = studentProjectService;
         this.studentCertificateService = studentCertificateService;
+        this.studentAvatarService = studentAvatarService;
     }
 
     @GetMapping("/me/profile")
     public String showMyProfile(@AuthenticationPrincipal UserAccount account, Model model) {
         model.addAttribute("profileForm", profileService.getMyProfile(account.getId()));
+        model.addAttribute("avatarExists", studentAvatarService.hasAvatar(account.getId()));
         addSkillData(account, model);
         addProjectData(account, model);
         addCertificateData(account, model);
@@ -64,6 +69,7 @@ public class StudentProfileController {
             addSkillData(account, model);
             addProjectData(account, model);
             addCertificateData(account, model);
+            model.addAttribute("avatarExists", studentAvatarService.hasAvatar(account.getId()));
             return "me/profile";
         }
 

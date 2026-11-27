@@ -227,3 +227,20 @@ Set `SECURITY_REMEMBER_ME_KEY` to a long, random secret in deployed environments
 - Successful registration creates a `STUDENT` account and a linked row in `profiles` in one transaction. The profile uses the supplied full name and `is_public = false` (private).
 - Successful registration redirects to `/login?registered` and shows a one-time success message.
 - CSRF remains enabled for the registration POST form through Thymeleaf `th:action`.
+
+
+## Password management and OTP recovery (T4E7A62)
+
+- Authenticated users can change their password at `GET/POST /account/password`; the current password must match the BCrypt hash before the new password is saved.
+- Anyone can start account recovery at `/forgot-password`, submit their email, and enter the 6-digit OTP plus a new password at `/reset-password`.
+- OTPs are generated with a cryptographically secure random generator, are valid for 10 minutes, and are stored only as BCrypt hashes in `password_reset_otps` (Flyway V4). The plain code is never written to the database.
+- An OTP is single-use. The fifth incorrect attempt invalidates it; an expired OTP and an OTP replaced by a newer request are also invalidated.
+- As requested for this OJT task, the generated code is written to the application log with the `DEMO PASSWORD RESET OTP` prefix instead of being emailed. This is strictly a development/testing substitute: disable/remove OTP logging and integrate a real email/SMS provider before production.
+- After requesting a reset, watch the Spring Boot console for the OTP line, then enter the code on `/reset-password`.
+- Unit tests cover current-password verification, OTP expiry, one-time consumption, and invalidation after five incorrect attempts.
+
+Run the test suite with:
+
+```bash
+./mvnw clean test
+```

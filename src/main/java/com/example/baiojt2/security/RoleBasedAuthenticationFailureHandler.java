@@ -35,7 +35,8 @@ public class RoleBasedAuthenticationFailureHandler implements AuthenticationFail
         String reason;
         if (exception instanceof LockedException || account.map(UserAccount::isLocked).orElse(false)) {
             reason = "locked";
-        } else if (exception instanceof DisabledException || account.isPresent()) {
+        } else if (exception instanceof DisabledException
+                || account.map(user -> !"ACTIVE".equalsIgnoreCase(user.getAccountStatus())).orElse(false)) {
             String status = account.map(UserAccount::getAccountStatus).orElse("");
             reason = switch (status) {
                 case "PENDING" -> "pending";
@@ -44,6 +45,7 @@ public class RoleBasedAuthenticationFailureHandler implements AuthenticationFail
                 default -> "disabled";
             };
         } else {
+            // Do not reveal whether an active email exists when the password is wrong.
             reason = "invalid";
         }
 

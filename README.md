@@ -214,3 +214,16 @@ All accounts seeded by V2 use password `Demo@12345`:
 - Student: `candidate01@demo.local` through `candidate15@demo.local`
 
 Set `SECURITY_REMEMBER_ME_KEY` to a long, random secret in deployed environments. The fallback value in application properties is for local development only.
+
+
+## Student registration (T4E7A61)
+
+- Registration page: `GET /register`; form submission: `POST /register`.
+- Fields: full name, email, password and password confirmation.
+- Bean Validation checks required values, email format and length limits.
+- Custom class-level `@ValidRegistration` checks that the confirmation matches and that the email is not already registered; violations are attached to the relevant field.
+- The form keeps the submitted full name and email when validation fails. Password fields are deliberately cleared and never echoed back into the page.
+- Passwords are encoded with the shared BCrypt `PasswordEncoder`; plain-text passwords are never persisted.
+- Successful registration creates a `STUDENT` account and a linked row in `profiles` in one transaction. The profile uses the supplied full name and `is_public = false` (private).
+- Successful registration redirects to `/login?registered` and shows a one-time success message.
+- CSRF remains enabled for the registration POST form through Thymeleaf `th:action`.

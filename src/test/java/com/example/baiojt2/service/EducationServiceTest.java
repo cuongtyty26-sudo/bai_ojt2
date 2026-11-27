@@ -38,7 +38,7 @@ class EducationServiceTest {
     void setUp() {
         ownProfile = new StudentProfile(10L, "Student A");
         ReflectionTestUtils.setField(ownProfile, "id", 100L);
-        when(profileRepository.findByUserId(10L)).thenReturn(Optional.of(ownProfile));
+        lenient().when(profileRepository.findByUserId(10L)).thenReturn(Optional.of(ownProfile));
 
         form = new EducationForm();
         form.setInstitution("  University  ");

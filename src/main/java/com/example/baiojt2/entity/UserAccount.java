@@ -43,6 +43,15 @@ public class UserAccount implements UserDetails {
     protected UserAccount() {
     }
 
+    public UserAccount(String email, String passwordHash, String role,
+                       boolean locked, String accountStatus) {
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.role = role;
+        this.locked = locked;
+        this.accountStatus = accountStatus;
+    }
+
     public Long getId() {
         return id;
     }

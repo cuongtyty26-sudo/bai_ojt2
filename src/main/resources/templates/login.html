@@ -16,22 +16,22 @@
         <h1 class="h4 text-center mb-2">Đăng nhập</h1>
         <p class="text-secondary text-center mb-4">Sử dụng email và mật khẩu tài khoản của bạn.</p>
 
-        <div th:if="${param.reason == 'locked'}" class="alert alert-danger" role="alert">
+        <div th:if="${param.reason != null and param.reason[0] == 'locked'}" class="alert alert-danger" role="alert">
             Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên để được hỗ trợ.
         </div>
-        <div th:if="${param.reason == 'pending'}" class="alert alert-warning" role="alert">
+        <div th:if="${param.reason != null and param.reason[0] == 'pending'}" class="alert alert-warning" role="alert">
             Tài khoản đang chờ quản trị viên phê duyệt. Bạn chưa thể đăng nhập lúc này.
         </div>
-        <div th:if="${param.reason == 'rejected'}" class="alert alert-danger" role="alert">
+        <div th:if="${param.reason != null and param.reason[0] == 'rejected'}" class="alert alert-danger" role="alert">
             Tài khoản đã bị từ chối. Vui lòng liên hệ bộ phận hỗ trợ nếu cần giải đáp.
         </div>
-        <div th:if="${param.reason == 'suspended'}" class="alert alert-danger" role="alert">
+        <div th:if="${param.reason != null and param.reason[0] == 'suspended'}" class="alert alert-danger" role="alert">
             Tài khoản đang bị tạm ngưng. Vui lòng liên hệ quản trị viên.
         </div>
-        <div th:if="${param.reason == 'disabled'}" class="alert alert-danger" role="alert">
+        <div th:if="${param.reason != null and param.reason[0] == 'disabled'}" class="alert alert-danger" role="alert">
             Tài khoản hiện không hoạt động. Vui lòng liên hệ quản trị viên.
         </div>
-        <div th:if="${param.reason == 'invalid'}" class="alert alert-danger" role="alert">
+        <div th:if="${param.reason != null and param.reason[0] == 'invalid'}" class="alert alert-danger" role="alert">
             Email hoặc mật khẩu không chính xác.
         </div>
         <div th:if="${param.logout}" class="alert alert-success" role="alert">

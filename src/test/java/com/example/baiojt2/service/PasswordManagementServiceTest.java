@@ -33,6 +33,7 @@ class PasswordManagementServiceTest {
         user = new UserAccount("student@example.test", encoder.encode("OldPass123"), "STUDENT", false, "ACTIVE");
         ReflectionTestUtils.setField(user, "id", 25L);
         when(users.findByEmailIgnoreCase("student@example.test")).thenReturn(Optional.of(user));
+        when(users.findById(25L)).thenReturn(Optional.of(user));
     }
 
     @Test

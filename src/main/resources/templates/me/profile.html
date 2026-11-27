@@ -203,7 +203,8 @@
                             <span th:text="${project.technologies}">Java, Spring Boot, MySQL</span>
                         </div>
                         <div class="mt-2 d-flex flex-wrap gap-3">
-                            <a th:href="${project.githubUrl}" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+                            <a th:if="${project.githubUrl != null and !#strings.isEmpty(project.githubUrl)}"
+                               th:href="${project.githubUrl}" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
                             <a th:if="${project.demoUrl != null and !#strings.isEmpty(project.demoUrl)}"
                                th:href="${project.demoUrl}" target="_blank" rel="noopener noreferrer">Demo ↗</a>
                         </div>

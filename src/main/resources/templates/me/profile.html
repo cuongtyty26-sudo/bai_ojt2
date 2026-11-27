@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Hồ sơ của tôi', ~{::content})}">
+<body>
+<section th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+                <div>
+                    <h1 class="h3 mb-1">Hồ sơ của tôi</h1>
+                    <p class="text-muted mb-0">Thông tin này thuộc tài khoản đang đăng nhập.</p>
+                </div>
+                <span class="badge text-bg-primary">STUDENT</span>
+            </div>
+
+            <form th:action="@{/me/profile}" th:object="${profileForm}" method="post"
+                  class="card shadow-sm">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                        <input id="fullName" type="text" th:field="*{fullName}"
+                               th:classappend="${#fields.hasErrors('fullName')} ? ' is-invalid' : ''"
+                               class="form-control" maxlength="150" required>
+                        <div class="invalid-feedback" th:errors="*{fullName}"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="dateOfBirth" class="form-label">Ngày sinh</label>
+                            <input id="dateOfBirth" type="date" th:field="*{dateOfBirth}"
+                                   th:classappend="${#fields.hasErrors('dateOfBirth')} ? ' is-invalid' : ''"
+                                   class="form-control">
+                            <div class="invalid-feedback" th:errors="*{dateOfBirth}"></div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">Số điện thoại</label>
+                            <input id="phone" type="tel" th:field="*{phone}"
+                                   th:classappend="${#fields.hasErrors('phone')} ? ' is-invalid' : ''"
+                                   class="form-control" placeholder="Ví dụ: 09012345678 hoặc +819012345678">
+                            <div class="invalid-feedback" th:errors="*{phone}"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="summary" class="form-label">Giới thiệu bản thân</label>
+                        <textarea id="summary" th:field="*{summary}"
+                                  th:classappend="${#fields.hasErrors('summary')} ? ' is-invalid' : ''"
+                                  class="form-control" rows="5" maxlength="2000"
+                                  placeholder="Kinh nghiệm, kỹ năng và điểm mạnh của bạn..."></textarea>
+                        <div class="invalid-feedback" th:errors="*{summary}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="desiredPosition" class="form-label">Vị trí mong muốn</label>
+                        <input id="desiredPosition" type="text" th:field="*{desiredPosition}"
+                               th:classappend="${#fields.hasErrors('desiredPosition')} ? ' is-invalid' : ''"
+                               class="form-control" maxlength="200" placeholder="Ví dụ: Java Backend Engineer">
+                        <div class="invalid-feedback" th:errors="*{desiredPosition}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="desiredWorkplace" class="form-label">Nơi làm việc mong muốn</label>
+                        <input id="desiredWorkplace" type="text" th:field="*{desiredWorkplace}"
+                               th:classappend="${#fields.hasErrors('desiredWorkplace')} ? ' is-invalid' : ''"
+                               class="form-control" maxlength="200" placeholder="Ví dụ: Tokyo, Aichi hoặc Remote">
+                        <div class="invalid-feedback" th:errors="*{desiredWorkplace}"></div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white d-flex justify-content-end gap-2 p-3">
+                    <a class="btn btn-outline-secondary" th:href="@{/}">Hủy</a>
+                    <button type="submit" class="btn btn-primary">Lưu hồ sơ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

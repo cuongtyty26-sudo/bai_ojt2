@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "profiles")
 public class StudentProfile {
@@ -21,6 +23,21 @@ public class StudentProfile {
     @Column(name = "full_name", nullable = false, length = 150)
     private String fullName;
 
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
+    @Column(name = "phone", length = 30)
+    private String phone;
+
+    @Column(name = "summary", columnDefinition = "TEXT")
+    private String summary;
+
+    @Column(name = "desired_position", length = 200)
+    private String desiredPosition;
+
+    @Column(name = "desired_workplace", length = 200)
+    private String desiredWorkplace;
+
     @Column(name = "is_public", nullable = false)
     private boolean isPublic;
 
@@ -33,19 +50,19 @@ public class StudentProfile {
         this.isPublic = false;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public boolean isPublic() {
-        return isPublic;
-    }
+    public Long getId() { return id; }
+    public Long getUserId() { return userId; }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    public LocalDate getDateOfBirth() { return dateOfBirth; }
+    public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+    public String getSummary() { return summary; }
+    public void setSummary(String summary) { this.summary = summary; }
+    public String getDesiredPosition() { return desiredPosition; }
+    public void setDesiredPosition(String desiredPosition) { this.desiredPosition = desiredPosition; }
+    public String getDesiredWorkplace() { return desiredWorkplace; }
+    public void setDesiredWorkplace(String desiredWorkplace) { this.desiredWorkplace = desiredWorkplace; }
+    public boolean isPublic() { return isPublic; }
 }

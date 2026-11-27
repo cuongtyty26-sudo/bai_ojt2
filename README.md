@@ -260,3 +260,19 @@ Run checks:
 ```bash
 ./mvnw clean test
 ```
+
+
+## Admin skill catalog (T4E7A66)
+
+- Admin skill catalog: `GET /admin/skills`; add at `GET/POST /admin/skills/new`; edit at `GET/POST /admin/skills/{skillId}/edit` and `POST /admin/skills/{skillId}`.
+- Supported categories: LANGUAGE (Ngôn ngữ), FRAMEWORK, DATABASE (CSDL), TOOL (Công cụ), and SOFT_SKILL (Kỹ năng mềm).
+- Skill names are trimmed and checked for duplicates without case sensitivity. The existing MySQL `skills.name` unique key uses `utf8mb4_0900_ai_ci`, which enforces case-insensitive uniqueness at database level as well. Duplicate names are shown as field-level form errors.
+- Skills can be hidden or reactivated without deleting their student associations. A skill referenced by `profile_skills` cannot be deleted; the service checks usage before delete and the UI offers only hide for used skills. Unused skills may be permanently deleted after confirmation.
+- Flyway migration `V7__extend_skills_catalog.sql` adds category and active/hidden state. V7 is intentionally used after the education migration V6 from task T4E7A65; existing migrations are not modified.
+- The entire `/admin/**` area is restricted to `ROLE_ADMIN` by the existing SecurityConfig. All state-changing operations use POST and retain CSRF protection.
+
+Run checks:
+
+```bash
+./mvnw clean test
+```

@@ -3,7 +3,6 @@ package com.example.baiojt2.exception;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,7 +25,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({EntityNotFoundException.class, NoSuchElementException.class})
-    public ModelAndView handleNotFoundException(Exception exception) {
+    public ModelAndView handleNotFoundException() {
         return errorPage("error/404", HttpStatus.NOT_FOUND,
                 "Không tìm thấy dữ liệu bạn yêu cầu.");
     }

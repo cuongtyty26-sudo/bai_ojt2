@@ -215,6 +215,46 @@
                 </div>
             </section>
 
+            <section class="card shadow-sm mt-4">
+                <div class="card-body p-4">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div>
+                            <h2 class="h4 mb-1">Chứng chỉ của tôi</h2>
+                            <p class="text-muted mb-0">Tải lên file PDF, JPG hoặc PNG (tối đa 5 MB).</p>
+                        </div>
+                        <a class="btn btn-primary" th:href="@{/me/certificates/new}">Thêm chứng chỉ</a>
+                    </div>
+                    <div th:if="${#lists.isEmpty(studentCertificates)}" class="text-muted text-center py-4">
+                        Bạn chưa thêm chứng chỉ nào.
+                    </div>
+                    <article th:each="certificate : ${studentCertificates}" class="border rounded p-3 mb-3">
+                        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                            <div>
+                                <h3 class="h5 mb-1" th:text="${certificate.name}">Tên chứng chỉ</h3>
+                                <div class="small text-muted" th:if="${certificate.issuer != null}"
+                                     th:text="|Đơn vị cấp: ${certificate.issuer}|">Đơn vị cấp</div>
+                                <div class="small text-muted" th:if="${certificate.issuedAt != null}"
+                                     th:text="|Ngày cấp: ${#temporals.format(certificate.issuedAt, 'dd/MM/yyyy')}|">Ngày cấp</div>
+                                <div class="small text-muted text-break" th:text="${certificate.originalFileName}">
+                                    certificate.pdf
+                                </div>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a class="btn btn-sm btn-outline-primary"
+                                   th:href="@{/me/certificates/{id}/view(id=${certificate.id})}"
+                                   target="_blank" rel="noopener noreferrer">Xem file</a>
+                                <a class="btn btn-sm btn-outline-secondary"
+                                   th:href="@{/me/certificates/{id}/download(id=${certificate.id})}">Tải xuống</a>
+                                <form th:action="@{/me/certificates/{id}/delete(id=${certificate.id})}" method="post"
+                                      onsubmit="return confirm('Xóa chứng chỉ này và file minh chứng?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Xóa</button>
+                                </form>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
         </div>
     </div>
     <script>

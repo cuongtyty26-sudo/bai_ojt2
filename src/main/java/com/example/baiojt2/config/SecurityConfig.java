@@ -7,22 +7,27 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Spring Security configuration permitting public access to the home page and static assets.
+ * Spring Security configuration permitting public access to the home page,
+ * static assets and friendly error pages.
  */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/", "/css/**", "/js/**", "/images/**", "/webjars/**", "/error").permitAll()
-						.anyRequest().authenticated()
-				)
-				.formLogin(form -> form.permitAll())
-				.logout(logout -> logout.permitAll());
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/css/**", "/js/**", "/images/**",
+                                "/webjars/**", "/error", "/error/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedPage("/error/403")
+                )
+                .formLogin(form -> form.permitAll())
+                .logout(logout -> logout.permitAll());
 
-		return http.build();
-	}
+        return http.build();
+    }
 }

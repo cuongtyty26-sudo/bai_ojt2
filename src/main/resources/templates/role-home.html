@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: layout('Khu vực làm việc', ~{::content})}">
+<head><title>Khu vực làm việc</title></head>
+<body>
+<section th:fragment="content">
+    <div class="p-4 p-md-5 rounded-3 bg-primary-subtle">
+        <h1 class="h3 fw-bold">Chào mừng trở lại, <span sec:authentication="name">user@example.com</span></h1>
+        <p class="mb-0" sec:authorize="hasRole('ADMIN')">Bạn đang ở khu vực quản trị hệ thống.</p>
+        <p class="mb-0" sec:authorize="hasRole('PARTNER')">Bạn đang ở khu vực đối tác tuyển dụng.</p>
+        <p class="mb-0" sec:authorize="hasRole('STUDENT')">Bạn đang ở khu vực sinh viên.</p>
+    </div>
+    <div class="mt-4">
+        <a class="btn btn-outline-primary" th:href="@{/}">Trang chủ chung</a>
+    </div>
+</section>
+</body>
+</html>

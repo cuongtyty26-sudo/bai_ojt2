@@ -31,7 +31,7 @@ public class StudentProject {
     @Column(nullable = false, length = 500)
     private String technologies;
 
-    @Column(name = "github_url", nullable = false, length = 500)
+    @Column(name = "github_url", length = 500)
     private String githubUrl;
 
     @Column(name = "demo_url", length = 500)

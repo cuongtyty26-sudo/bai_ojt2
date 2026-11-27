@@ -1,13 +1,46 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang chủ - bai_ojt2</title>
-</head>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: layout('Trang chủ', ~{::content})}">
+<head><title>Trang chủ</title></head>
 <body>
-    <main>
-        <h1>Trang chủ</h1>
-    </main>
+<section th:fragment="content">
+    <div class="p-4 p-md-5 mb-4 rounded-3 bg-primary-subtle">
+        <div class="container-fluid py-3">
+            <h1 class="display-6 fw-bold">Chào mừng đến với OJT Connect</h1>
+            <p class="col-md-9 fs-5 mb-0">Nền tảng kết nối sinh viên, ứng viên và nhà tuyển dụng. Các chức năng sẽ hiển thị theo vai trò tài khoản của bạn.</p>
+        </div>
+    </div>
+    <div class="row g-3">
+        <div class="col-md-4" sec:authorize="hasRole('CANDIDATE')">
+            <div class="card h-100"><div class="card-body">
+                <h2 class="h5">Hồ sơ của tôi</h2>
+                <p class="text-secondary">Cập nhật thông tin học vấn, kỹ năng và dự án.</p>
+                <a class="btn btn-primary" th:href="@{/candidate/profile}">Mở hồ sơ</a>
+            </div></div>
+        </div>
+        <div class="col-md-4" sec:authorize="hasRole('RECRUITER')">
+            <div class="card h-100"><div class="card-body">
+                <h2 class="h5">Tìm ứng viên</h2>
+                <p class="text-secondary">Tìm kiếm và lưu hồ sơ ứng viên phù hợp.</p>
+                <a class="btn btn-primary" th:href="@{/recruiter/candidates}">Tìm ứng viên</a>
+            </div></div>
+        </div>
+        <div class="col-md-4" sec:authorize="hasRole('ADMIN')">
+            <div class="card h-100"><div class="card-body">
+                <h2 class="h5">Quản trị hệ thống</h2>
+                <p class="text-secondary">Quản lý tài khoản và xử lý hồ sơ chờ duyệt.</p>
+                <a class="btn btn-primary" th:href="@{/admin/reviews}">Mở hàng chờ duyệt</a>
+            </div></div>
+        </div>
+        <div class="col-12" sec:authorize="isAnonymous()">
+            <div class="card"><div class="card-body">
+                <h2 class="h5">Bắt đầu sử dụng</h2>
+                <p class="text-secondary">Đăng nhập để truy cập các chức năng theo vai trò.</p>
+                <a class="btn btn-primary" th:href="@{/login}">Đăng nhập</a>
+            </div></div>
+        </div>
+    </div>
+</section>
 </body>
 </html>

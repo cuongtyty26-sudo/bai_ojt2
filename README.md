@@ -114,3 +114,40 @@ The password is stored as a BCrypt hash in the seed migration. Change or remove 
 ### Resetting a local database
 
 Flyway migrations are versioned and should not be edited after they have run in a shared environment. To rerun from scratch in a disposable local database, drop and recreate the local database, then start the application again. **This deletes all local data. Do not run against a database containing data you need.**
+
+## Shared Thymeleaf layout (T4E7A5E)
+
+All application pages should reuse the common layout at `templates/fragments/layout.html`. It composes the role-aware header, global flash/feedback messages, page content and footer. Bootstrap 5.3.3 is loaded from the official jsDelivr CDN, with project-wide styling in `static/css/app.css`.
+
+### Fragments
+
+- `fragments/header.html`: OJT Connect logo, home link, role-specific navigation, authenticated username, role badge, login link for anonymous visitors and POST logout form.
+- `fragments/footer.html`: shared footer.
+- `fragments/alerts.html`: success/error flash messages plus login-error and logout feedback.
+- `fragments/layout.html`: common HTML document, Bootstrap assets and content slot.
+
+The `thymeleaf-extras-springsecurity6` dependency was already present in `pom.xml`; no extra dependency is required. The header uses `sec:authorize` and `sec:authentication` to display navigation for `ROLE_ADMIN`, `ROLE_RECRUITER` and `ROLE_CANDIDATE`.
+
+### Reuse the layout on new pages
+
+Create a content fragment and replace the page root with the shared layout:
+
+```html
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: layout('Tên trang', ~{::content})}">
+<body>
+<section th:fragment="content">
+    <h1>Nội dung trang</h1>
+</section>
+</body>
+</html>
+```
+
+### Role/authority convention
+
+The database role values are `ADMIN`, `RECRUITER`, and `CANDIDATE`. The Spring Security `GrantedAuthority` values supplied by the authentication layer must be `ROLE_ADMIN`, `ROLE_RECRUITER`, and `ROLE_CANDIDATE` because `hasRole('ADMIN')` checks the `ROLE_` prefix. Authentication/UserDetails wiring is handled separately from this layout task.
+
+The menu URLs (`/admin/users`, `/admin/reviews`, `/recruiter/candidates`, `/recruiter/shortlists`, `/recruiter/interviews`, `/candidate/profile`, and `/candidate/interviews`) are navigation targets for the corresponding feature tasks; they are not implemented by this layout-only change.

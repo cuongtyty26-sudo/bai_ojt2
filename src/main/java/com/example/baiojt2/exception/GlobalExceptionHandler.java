@@ -1,6 +1,7 @@
 package com.example.baiojt2.exception;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.access.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,6 +23,14 @@ public class GlobalExceptionHandler {
                                           RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
         return "redirect:/";
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ModelAndView handleAccessDeniedException() {
+        ModelAndView modelAndView = new ModelAndView("error/403");
+        modelAndView.setStatus(HttpStatus.FORBIDDEN);
+        modelAndView.addObject("errorMessage", "Bạn không có quyền truy cập hoặc chỉnh sửa dữ liệu này.");
+        return modelAndView;
     }
 
     @ExceptionHandler({EntityNotFoundException.class, NoSuchElementException.class})

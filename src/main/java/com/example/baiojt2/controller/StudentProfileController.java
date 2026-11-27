@@ -3,6 +3,7 @@ package com.example.baiojt2.controller;
 import com.example.baiojt2.dto.StudentProfileForm;
 import com.example.baiojt2.entity.UserAccount;
 import com.example.baiojt2.service.StudentProfileService;
+import com.example.baiojt2.service.EducationService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -17,14 +18,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class StudentProfileController {
 
     private final StudentProfileService profileService;
+    private final EducationService educationService;
 
-    public StudentProfileController(StudentProfileService profileService) {
+    public StudentProfileController(StudentProfileService profileService, EducationService educationService) {
         this.profileService = profileService;
+        this.educationService = educationService;
     }
 
     @GetMapping("/me/profile")
     public String showMyProfile(@AuthenticationPrincipal UserAccount account, Model model) {
         model.addAttribute("profileForm", profileService.getMyProfile(account.getId()));
+        model.addAttribute("educations", educationService.listMyEducations(account.getId()));
         return "me/profile";
     }
 
@@ -34,6 +38,7 @@ public class StudentProfileController {
                                   BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("educations", educationService.listMyEducations(account.getId()));
             return "me/profile";
         }
 

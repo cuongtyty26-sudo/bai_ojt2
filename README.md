@@ -260,3 +260,20 @@ Run checks:
 ```bash
 ./mvnw clean test
 ```
+
+
+## Student education management (T4E7A65)
+
+- The student profile page `/me/profile` lists education records ordered by start date, with school, major, date range and optional GPA.
+- Students can add education at `GET/POST /me/educations/new`, edit at `GET/POST /me/educations/{educationId}/edit` and `POST /me/educations/{educationId}`, and delete with `POST /me/educations/{educationId}/delete`.
+- Form validation requires school, major and start date; end date is optional for ongoing study. If both dates are provided, start date must not be after end date. GPA is optional, from 0 to 4, with up to two decimal places.
+- Flyway migration `V6__add_education_gpa.sql` adds the optional GPA column to the existing `educations` table. Earlier migrations are not modified.
+- Every read-for-edit, update and delete loads the education record and verifies its `profile_id` against the profile belonging to the authenticated STUDENT. A different student's record raises Spring Security `AccessDeniedException` and returns HTTP 403; a nonexistent ID returns HTTP 404. The profile ID is never accepted from the request.
+- Delete is a CSRF-protected POST form and asks the user for browser confirmation before submitting.
+- Unit tests cover creation, foreign-record edit/delete denial, missing records and date-range validation.
+
+Run checks:
+
+```bash
+./mvnw clean test
+```

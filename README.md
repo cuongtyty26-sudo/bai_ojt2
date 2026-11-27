@@ -276,3 +276,25 @@ Run checks:
 ```bash
 ./mvnw clean test
 ```
+
+
+## Student skill selection and self-assessment (T4E7A67)
+
+- The student profile page includes a quick-search selector populated only from active skills in the admin catalog. Already selected skills are excluded from the available options.
+- A student can add a catalog skill and self-assess it from level 1 to 5. The UI explains every level:
+  - 1 – Mới bắt đầu: knows basic concepts and needs guidance.
+  - 2 – Cơ bản: can complete simple tasks with documentation or guidance.
+  - 3 – Trung bình: can independently handle routine tasks and common problems.
+  - 4 – Nâng cao: works independently on complex cases and can support others.
+  - 5 – Thành thạo: has deep knowledge and can design solutions or mentor others.
+- The selected skills are displayed under their catalog category. Students can update a rating or remove a skill from their own profile.
+- Duplicate selection is prevented in the service and by the database unique key on `profile_skills(profile_id, skill_id)`. Skill ownership is always resolved from the authenticated principal; no profile ID is accepted from the request.
+- Hidden catalog skills cannot be newly selected, but existing student associations remain visible and can still be removed.
+- The existing V1 `profile_skills` table already stores `proficiency_level` (1–5); no new migration is required for this task.
+- Routes: `POST /me/skills`, `POST /me/skills/{skillId}` (update level), and `POST /me/skills/{skillId}/remove`. They are protected by the existing `ROLE_STUDENT` rule for `/me/**` and CSRF.
+
+Run checks:
+
+```bash
+./mvnw clean test
+```

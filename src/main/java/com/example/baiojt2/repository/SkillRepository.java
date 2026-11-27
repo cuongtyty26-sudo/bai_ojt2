@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface SkillRepository extends JpaRepository<Skill, Long> {
 
-    List<Skill> findAllByOrderByCategoryAscNameAsc();\n\n    List<Skill> findAllByActiveTrueOrderByCategoryAscNameAsc();
+    List<Skill> findAllByOrderByCategoryAscNameAsc();
+
+    List<Skill> findAllByActiveTrueOrderByCategoryAscNameAsc();
 
     boolean existsByNameIgnoreCase(String name);
 

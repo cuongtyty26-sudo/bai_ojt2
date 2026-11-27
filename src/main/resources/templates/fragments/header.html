@@ -12,6 +12,7 @@
 <li class="nav-item" sec:authorize="hasRole('PARTNER')"><a class="nav-link" th:href="@{/partner/shortlists}">Ứng viên đã lưu</a></li>
 <li class="nav-item" sec:authorize="hasRole('PARTNER')"><a class="nav-link" th:href="@{/partner/interviews}">Yêu cầu phỏng vấn</a></li>
 <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link" th:href="@{/admin/users}">Quản trị tài khoản</a></li>
+<li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link" th:href="@{/admin/skills}">Quản lý kỹ năng</a></li>
 <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link" th:href="@{/admin/reviews}">Hàng chờ duyệt</a></li>
 </ul><div class="d-flex align-items-lg-center gap-3">
 <div sec:authorize="isAuthenticated()" class="text-white small">Xin chào, <strong sec:authentication="name">username</strong>

@@ -13,6 +13,36 @@
                 <span class="badge text-bg-primary">STUDENT</span>
             </div>
 
+            <section class="card shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h5 mb-3">Ảnh đại diện</h2>
+                    <div class="d-flex flex-wrap align-items-center gap-4">
+                        <div class="flex-shrink-0">
+                            <img id="avatarPreview" th:if="${avatarExists}" th:src="@{/me/avatar}"
+                                 alt="Ảnh đại diện" class="rounded-circle border"
+                                 style="width:120px;height:120px;object-fit:cover;">
+                            <img id="avatarPreview" th:unless="${avatarExists}" src="" alt="Xem trước ảnh đại diện"
+                                 class="rounded-circle border d-none"
+                                 style="width:120px;height:120px;object-fit:cover;">
+                            <div id="avatarInitial" th:unless="${avatarExists}"
+                                 class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+                                 style="width:120px;height:120px;font-size:2.5rem;"
+                                 th:text="${#strings.toUpperCase(#strings.substring(profileForm.fullName, 0, 1))}">N</div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <form th:action="@{/me/avatar}" method="post" enctype="multipart/form-data" id="avatarForm">
+                                <label for="avatarFile" class="form-label">Chọn ảnh JPG hoặc PNG</label>
+                                <input id="avatarFile" name="avatarFile" type="file" class="form-control"
+                                       accept=".jpg,.jpeg,.png,image/jpeg,image/png" required>
+                                <div class="form-text">Dung lượng tối đa 2 MB. Ảnh mới sẽ thay thế ảnh hiện tại sau khi lưu.</div>
+                                <div id="avatarPreviewError" class="text-danger small mt-2" role="alert"></div>
+                                <button type="submit" class="btn btn-primary mt-3">Lưu ảnh đại diện</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <form th:action="@{/me/profile}" th:object="${profileForm}" method="post"
                   class="card shadow-sm">
                 <div class="card-body p-4">
@@ -259,6 +289,41 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const avatarInput = document.getElementById('avatarFile');
+            const avatarPreview = document.getElementById('avatarPreview');
+            const avatarInitial = document.getElementById('avatarInitial');
+            const avatarError = document.getElementById('avatarPreviewError');
+            let previewUrl = null;
+            if (avatarInput) {
+                avatarInput.addEventListener('change', function () {
+                    avatarError.textContent = '';
+                    const file = this.files && this.files[0];
+                    if (!file) return;
+                    const allowedTypes = ['image/jpeg', 'image/png'];
+                    if (!allowedTypes.includes(file.type) || !/\\.(jpe?g|png)$/i.test(file.name)) {
+                        avatarError.textContent = 'Chỉ chấp nhận ảnh JPG hoặc PNG.';
+                        this.value = '';
+                        return;
+                    }
+                    if (file.size > 2 * 1024 * 1024) {
+                        avatarError.textContent = 'Ảnh đại diện không được vượt quá 2 MB.';
+                        this.value = '';
+                        return;
+                    }
+                    if (previewUrl) URL.revokeObjectURL(previewUrl);
+                    previewUrl = URL.createObjectURL(file);
+                    avatarPreview.src = previewUrl;
+                    avatarPreview.classList.remove('d-none');
+                    if (avatarInitial) avatarInitial.classList.add('d-none');
+                });
+                document.getElementById('avatarForm').addEventListener('submit', function (event) {
+                    if (!avatarInput.files || !avatarInput.files.length) {
+                        event.preventDefault();
+                        avatarError.textContent = 'Vui lòng chọn ảnh trước khi lưu.';
+                    }
+                });
+            }
+
             const search = document.getElementById('skillSearch');
             const select = document.getElementById('skillId');
             if (!search || !select) return;

@@ -151,3 +151,41 @@ Create a content fragment and replace the page root with the shared layout:
 The database role values are `ADMIN`, `RECRUITER`, and `CANDIDATE`. The Spring Security `GrantedAuthority` values supplied by the authentication layer must be `ROLE_ADMIN`, `ROLE_RECRUITER`, and `ROLE_CANDIDATE` because `hasRole('ADMIN')` checks the `ROLE_` prefix. Authentication/UserDetails wiring is handled separately from this layout task.
 
 The menu URLs (`/admin/users`, `/admin/reviews`, `/recruiter/candidates`, `/recruiter/shortlists`, `/recruiter/interviews`, `/candidate/profile`, and `/candidate/interviews`) are navigation targets for the corresponding feature tasks; they are not implemented by this layout-only change.
+
+
+## Error handling and flash messages (T4E7A5F)
+
+### Friendly error pages
+
+- `GlobalExceptionHandler` (`@ControllerAdvice`) handles application exceptions centrally.
+- Throw `BusinessException` for a business-rule violation. Its message is treated as safe user-facing text and is shown once after redirecting to the home page.
+- `EntityNotFoundException` and `NoSuchElementException` return the friendly `error/404.html` page.
+- Unexpected exceptions return `error/500.html`; the exception is written to server logs only. Stack traces and exception messages are not rendered in the browser.
+- Spring Security forwards access-denied requests to `/error/403`, which displays `error/403.html`. The page does not expose protected resource details.
+- Spring Boot's default error endpoint resolves `error/404.html` and `error/500.html` for unmatched routes and server errors. Error response details are disabled in `application.properties`.
+
+### Flash messages after a successful or failed operation
+
+Use `RedirectAttributes` in MVC POST/PUT/DELETE handlers. Flash attributes survive the redirect for one request and are displayed by the existing global `fragments/alerts.html` inside the shared layout.
+
+Example success response:
+
+```java
+@PostMapping("/example")
+public String create(@Valid @ModelAttribute ExampleForm form,
+                     RedirectAttributes redirectAttributes) {
+    exampleService.create(form);
+    redirectAttributes.addFlashAttribute("successMessage", "Tạo dữ liệu thành công.");
+    return "redirect:/example";
+}
+```
+
+Example business-rule failure:
+
+```java
+if (alreadyExists) {
+    throw new BusinessException("Dữ liệu này đã tồn tại.");
+}
+```
+
+The shared alert fragment already displays `successMessage` and `errorMessage`; no page-specific alert markup is needed. Do not put SQL, stack traces, passwords, tokens or internal exception details in a `BusinessException` message.

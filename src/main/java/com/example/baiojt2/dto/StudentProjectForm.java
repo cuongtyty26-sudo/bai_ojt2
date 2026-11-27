@@ -19,7 +19,7 @@ public class StudentProjectForm {
     private String technologies;
 
     @NotBlank(message = "Vui lòng nhập link GitHub.")
-    @URL(protocol = "https", message = "Link GitHub phải là URL HTTPS hợp lệ.")
+    @URL(protocol = "https", host = "github.com", message = "Vui lòng nhập URL HTTPS hợp lệ từ github.com.")
     @Size(max = 500, message = "Link GitHub tối đa 500 ký tự.")
     private String githubUrl;
 

@@ -9,4 +9,4 @@ ALTER TABLE projects
 
 ALTER TABLE projects
     ADD CONSTRAINT chk_projects_github_url
-    CHECK (github_url IS NULL OR github_url LIKE 'http://%' OR github_url LIKE 'https://');
+    CHECK (github_url IS NULL OR github_url LIKE 'http://%' OR github_url LIKE 'https://%');

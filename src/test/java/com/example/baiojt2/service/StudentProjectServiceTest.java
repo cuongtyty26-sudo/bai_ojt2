@@ -17,7 +17,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.*;\nimport static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 class StudentProjectServiceTest {
@@ -35,7 +35,7 @@ class StudentProjectServiceTest {
     void setUp() {
         profile = new StudentProfile(10L, "Student");
         ReflectionTestUtils.setField(profile, "id", 20L);
-        when(profileRepository.findByUserId(10L)).thenReturn(Optional.of(profile));
+        lenient().when(profileRepository.findByUserId(10L)).thenReturn(Optional.of(profile));
     }
 
     private StudentProjectForm validForm() {

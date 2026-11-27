@@ -38,6 +38,7 @@ public class StudentProfileController {
                                   BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("educations", educationService.listMyEducations(account.getId()));
             return "me/profile";
         }
 

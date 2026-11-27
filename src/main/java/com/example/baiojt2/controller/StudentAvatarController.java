@@ -43,7 +43,7 @@ public class StudentAvatarController {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(avatar.contentType()))
                 .cacheControl(CacheControl.noStore())
-                .header(HttpHeaders.X_CONTENT_TYPE_OPTIONS, "nosniff")
+                .header("X-Content-Type-Options", "nosniff")
                 .body(new FileSystemResource(avatar.path()));
     }
 }

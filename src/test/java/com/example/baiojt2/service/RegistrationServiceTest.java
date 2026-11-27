@@ -18,6 +18,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.lenient();
 
 @ExtendWith(MockitoExtension.class)
 class RegistrationServiceTest {
@@ -37,9 +38,9 @@ class RegistrationServiceTest {
 
     @BeforeEach
     void setUp() {
-        when(userRepository.existsByEmailIgnoreCase("student@example.test")).thenReturn(false);
-        when(passwordEncoder.encode("Password123")).thenReturn("bcrypt-hash");
-        when(userRepository.save(any(UserAccount.class))).thenAnswer(invocation -> {
+        lenient().when(userRepository.existsByEmailIgnoreCase("student@example.test")).thenReturn(false);
+        lenient().when(passwordEncoder.encode("Password123")).thenReturn("bcrypt-hash");
+        lenient().when(userRepository.save(any(UserAccount.class))).thenAnswer(invocation -> {
             UserAccount account = invocation.getArgument(0);
             ReflectionTestUtils.setField(account, "id", 101L);
             return account;

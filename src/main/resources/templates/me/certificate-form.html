@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Thêm chứng chỉ', ~{::content})}">
+<body>
+<section th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <h1 class="h3 mb-4">Thêm chứng chỉ</h1>
+            <div th:if="${uploadError}" class="alert alert-danger" th:text="${uploadError}"></div>
+            <form th:action="@{/me/certificates}" th:object="${certificateForm}"
+                  method="post" enctype="multipart/form-data" class="card shadow-sm">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Tên chứng chỉ <span class="text-danger">*</span></label>
+                        <input id="name" type="text" th:field="*{name}"
+                               th:classappend="${#fields.hasErrors('name')} ? ' is-invalid' : ''"
+                               class="form-control" maxlength="200" required>
+                        <div class="invalid-feedback" th:errors="*{name}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="issuer" class="form-label">Đơn vị cấp</label>
+                        <input id="issuer" type="text" th:field="*{issuer}"
+                               th:classappend="${#fields.hasErrors('issuer')} ? ' is-invalid' : ''"
+                               class="form-control" maxlength="200" placeholder="Ví dụ: Oracle, AWS, JLPT">
+                        <div class="invalid-feedback" th:errors="*{issuer}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="issuedAt" class="form-label">Ngày cấp</label>
+                        <input id="issuedAt" type="date" th:field="*{issuedAt}"
+                               th:classappend="${#fields.hasErrors('issuedAt')} ? ' is-invalid' : ''"
+                               class="form-control">
+                        <div class="invalid-feedback" th:errors="*{issuedAt}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="evidenceFile" class="form-label">File minh chứng <span class="text-danger">*</span></label>
+                        <input id="evidenceFile" type="file" name="evidenceFile"
+                               accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+                               class="form-control" required>
+                        <div class="form-text">Chỉ nhận PDF, JPG, PNG. Dung lượng tối đa 5 MB.</div>
+                        <div class="text-danger small" th:if="${#fields.hasErrors('evidenceFile')}"
+                             th:errors="*{evidenceFile}"></div>
+                    </div>
+                    <div class="alert alert-info mb-0">
+                        File được lưu trong thư mục riêng, không thể truy cập trực tiếp bằng URL công khai.
+                        Chỉ bạn và quản trị viên mới có quyền xem hoặc tải file.
+                    </div>
+                </div>
+                <div class="card-footer bg-white d-flex justify-content-end gap-2 p-3">
+                    <a class="btn btn-outline-secondary" th:href="@{/me/profile}">Hủy</a>
+                    <button type="submit" class="btn btn-primary">Lưu chứng chỉ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -244,3 +244,19 @@ Run the test suite with:
 ```bash
 ./mvnw clean test
 ```
+
+
+## Admin account management (T4E7A63)
+
+- Admin-only account management page: `GET /admin/users`.
+- The account table uses database-backed pagination (10 rows by default), keyword search across student full name / company name and email, role filters (`ADMIN`, `PARTNER`, `STUDENT`), and account-state / lock filters.
+- Admin can create a `PARTNER` account by entering a company name, email, and initial password. The company row is saved in `companies`, its ID is assigned to `users.company_id`, and the account password is BCrypt encoded. New partner accounts start as `ACTIVE` and unlocked.
+- Admin can lock or unlock accounts. The page asks for browser confirmation before posting either action; CSRF protection remains enabled.
+- The currently signed-in admin cannot lock their own account. The service also prevents locking the last unlocked ADMIN account.
+- The existing V1 schema already contains `companies` and nullable `users.company_id`; no new migration is required for this task.
+
+Run tests:
+
+```bash
+./mvnw clean test
+```

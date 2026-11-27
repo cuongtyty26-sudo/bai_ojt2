@@ -38,6 +38,12 @@ public class StudentProfile {
     @Column(name = "desired_workplace", length = 200)
     private String desiredWorkplace;
 
+    @Column(name = "avatar_file_name", length = 64)
+    private String avatarFileName;
+
+    @Column(name = "avatar_content_type", length = 30)
+    private String avatarContentType;
+
     @Column(name = "is_public", nullable = false)
     private boolean isPublic;
 
@@ -64,5 +70,9 @@ public class StudentProfile {
     public void setDesiredPosition(String desiredPosition) { this.desiredPosition = desiredPosition; }
     public String getDesiredWorkplace() { return desiredWorkplace; }
     public void setDesiredWorkplace(String desiredWorkplace) { this.desiredWorkplace = desiredWorkplace; }
+    public String getAvatarFileName() { return avatarFileName; }
+    public void setAvatarFileName(String avatarFileName) { this.avatarFileName = avatarFileName; }
+    public String getAvatarContentType() { return avatarContentType; }
+    public void setAvatarContentType(String avatarContentType) { this.avatarContentType = avatarContentType; }
     public boolean isPublic() { return isPublic; }
 }

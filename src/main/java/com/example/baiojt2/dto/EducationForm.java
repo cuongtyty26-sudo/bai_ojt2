@@ -4,6 +4,7 @@ import com.example.baiojt2.entity.Education;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -26,6 +27,7 @@ public class EducationForm {
 
     private LocalDate endDate;
 
+    @Digits(integer = 1, fraction = 2, message = "GPA chỉ được có tối đa 2 chữ số thập phân.")
     @DecimalMin(value = "0.0", message = "GPA phải từ 0 đến 4.")
     @DecimalMax(value = "4.0", message = "GPA phải từ 0 đến 4.")
     private BigDecimal gpa;

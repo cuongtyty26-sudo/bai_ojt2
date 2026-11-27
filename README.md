@@ -244,3 +244,19 @@ Run the test suite with:
 ```bash
 ./mvnw clean test
 ```
+
+
+## Student self-service profile (T4E7A64)
+
+- Student profile page: `GET /me/profile`; update with `POST /me/profile`.
+- The page displays and edits full name, date of birth, phone number, personal introduction, desired position and desired workplace.
+- Flyway migration `V5__extend_student_profile.sql` adds the date-of-birth, desired-position and desired-workplace columns. Existing V1–V4 migrations are left unchanged.
+- Bean Validation checks required/maximum full-name length, past date of birth, phone-number format and text length limits. Field-level messages are rendered next to each input. Invalid HTML date values are handled as binding errors.
+- The controller obtains the account from Spring Security's authenticated principal. The service loads the profile only by that authenticated account's user ID; no user ID is accepted from the form or URL. A missing owned profile returns a not-found error.
+- Only users with `ROLE_STUDENT` can access `/me/**`, as enforced by the existing SecurityConfig. CSRF protection remains enabled on the update form.
+
+Run checks:
+
+```bash
+./mvnw clean test
+```

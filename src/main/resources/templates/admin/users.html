@@ -64,7 +64,7 @@
                     <td th:text="${account.accountStatus()}"></td>
                     <td><span th:if="${account.locked()}" class="badge text-bg-danger">Đã khóa</span><span th:unless="${account.locked()}" class="badge text-bg-success">Hoạt động</span></td>
                     <td class="text-end">
-                        <form th:if="${!account.locked()}" th:action="@{/admin/users/{id}/lock(id=${account.id()})}" method="post" class="d-inline"
+                        <form th:if="${!account.locked() and account.id() != currentAdminId}" th:action="@{/admin/users/{id}/lock(id=${account.id()})}" method="post" class="d-inline"
                               onsubmit="return confirm('Bạn chắc chắn muốn KHÓA tài khoản này?');">
                             <button type="submit" class="btn btn-sm btn-outline-danger">Khóa</button>
                         </form>

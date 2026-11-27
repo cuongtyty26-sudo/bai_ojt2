@@ -54,7 +54,7 @@ public class PasswordManagementService {
     public void resetPassword(String email, String code, String newPassword) {
         UserAccount user = users.findByEmailIgnoreCase(email.trim().toLowerCase(Locale.ROOT))
                 .orElseThrow(() -> new IllegalArgumentException("Email hoặc OTP không hợp lệ."));
-        PasswordResetOtp otp = otps.findActiveForUpdate(user.getId())
+        PasswordResetOtp otp = otps.findFirstByUserIdAndUsedAtIsNullOrderByCreatedAtDesc(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("OTP không hợp lệ hoặc đã được sử dụng."));
         if (otp.isExpired()) {
             otp.invalidate();

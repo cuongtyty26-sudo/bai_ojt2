@@ -346,3 +346,17 @@ Configure a persistent private directory on the server before deployment; do not
 - If no avatar exists, the profile shows a circular placeholder containing the first letter of the student's name.
 - Flyway V10 adds nullable avatar filename and content-type columns to `profiles`; existing migrations are unchanged.
 - Run `./mvnw clean test` and verify V10 against the local MySQL database before merging.
+
+
+## Automated tests (T4E7A6B)
+
+- JUnit 5 + Mockito service tests cover student registration (normalization, BCrypt password hashing, duplicate email and account-save failure), password change/OTP recovery, education ownership and CRUD behavior, and student skill add/update/remove rules.
+- MockMvc tests cover public login page, successful and failed form login, ADMIN/PARTNER/STUDENT URL authorization, unauthenticated redirects, and invalid registration/password/education forms.
+- Existing project tests are retained. The latest full CI run completed **65 tests, 0 failures, 0 errors, 0 skipped**.
+- GitHub Actions workflow: `.github/workflows/maven-tests.yml`; runs `./mvnw --batch-mode --no-transfer-progress clean test` on pushes to the task branch.
+- H2 test profile uses Hibernate `create-drop` and disables Flyway because the production migrations contain MySQL-specific DDL (for example `ALTER TABLE ... DROP CHECK`). This verifies the application context and automated tests, but does not replace running migrations against a real MySQL development database.
+- Run locally:
+
+```bash
+./mvnw clean test
+```

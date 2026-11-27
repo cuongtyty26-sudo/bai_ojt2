@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Học vấn', ~{::content})}">
+<body>
+<section th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="h3 mb-4" th:text="${formTitle}">Học vấn</h1>
+            <form th:action="${formAction}" th:object="${educationForm}" method="post" class="card shadow-sm">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <label for="institution" class="form-label">Trường học <span class="text-danger">*</span></label>
+                        <input id="institution" type="text" th:field="*{institution}"
+                               th:classappend="${#fields.hasErrors('institution')} ? ' is-invalid' : ''"
+                               class="form-control" maxlength="200" required>
+                        <div class="invalid-feedback" th:errors="*{institution}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="major" class="form-label">Chuyên ngành <span class="text-danger">*</span></label>
+                        <input id="major" type="text" th:field="*{major}"
+                               th:classappend="${#fields.hasErrors('major')} ? ' is-invalid' : ''"
+                               class="form-control" maxlength="150" required>
+                        <div class="invalid-feedback" th:errors="*{major}"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="startDate" class="form-label">Từ ngày <span class="text-danger">*</span></label>
+                            <input id="startDate" type="date" th:field="*{startDate}"
+                                   th:classappend="${#fields.hasErrors('startDate')} ? ' is-invalid' : ''"
+                                   class="form-control" required>
+                            <div class="invalid-feedback" th:errors="*{startDate}"></div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="endDate" class="form-label">Đến ngày</label>
+                            <input id="endDate" type="date" th:field="*{endDate}"
+                                   th:classappend="${#fields.hasErrors('endDate')} ? ' is-invalid' : ''"
+                                   class="form-control">
+                            <div class="invalid-feedback" th:errors="*{endDate}"></div>
+                        </div>
+                    </div>
+                    <div th:if="${#fields.hasErrors('dateRangeValid')}" class="alert alert-danger py-2"
+                         th:errors="*{dateRangeValid}"></div>
+                    <div class="mb-3">
+                        <label for="gpa" class="form-label">GPA (không bắt buộc)</label>
+                        <input id="gpa" type="number" th:field="*{gpa}"
+                               th:classappend="${#fields.hasErrors('gpa')} ? ' is-invalid' : ''"
+                               class="form-control" min="0" max="4" step="0.01" placeholder="Ví dụ: 3.50">
+                        <div class="invalid-feedback" th:errors="*{gpa}"></div>
+                        <div class="form-text">Thang điểm 0–4. Có thể để trống nếu không áp dụng.</div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white d-flex justify-content-end gap-2 p-3">
+                    <a class="btn btn-outline-secondary" th:href="@{/me/profile}">Hủy</a>
+                    <button type="submit" class="btn btn-primary">Lưu học vấn</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -49,7 +49,7 @@ class PasswordManagementServiceTest {
     void fifthWrongOtpAttemptInvalidatesCodeAndPersistsAttemptCount() {
         PasswordResetOtp otp = new PasswordResetOtp(25L, encoder.encode("123456"), LocalDateTime.now().plusMinutes(10));
         for (int i = 0; i < 4; i++) otp.incrementAttempts();
-        when(otps.findActiveForUpdate(25L)).thenReturn(Optional.of(otp));
+        when(otps.findFirstByUserIdAndUsedAtIsNullOrderByCreatedAtDesc(25L)).thenReturn(Optional.of(otp));
 
         assertThrows(IllegalArgumentException.class,
                 () -> service.resetPassword("student@example.test", "000000", "NewPass123"));
@@ -61,7 +61,7 @@ class PasswordManagementServiceTest {
     @Test
     void correctOtpChangesPasswordAndConsumesOtp() {
         PasswordResetOtp otp = new PasswordResetOtp(25L, encoder.encode("123456"), LocalDateTime.now().plusMinutes(10));
-        when(otps.findActiveForUpdate(25L)).thenReturn(Optional.of(otp));
+        when(otps.findFirstByUserIdAndUsedAtIsNullOrderByCreatedAtDesc(25L)).thenReturn(Optional.of(otp));
 
         service.resetPassword("student@example.test", "123456", "NewPass123");
 
@@ -72,7 +72,7 @@ class PasswordManagementServiceTest {
     @Test
     void expiredOtpIsInvalidated() {
         PasswordResetOtp otp = new PasswordResetOtp(25L, encoder.encode("123456"), LocalDateTime.now().minusSeconds(1));
-        when(otps.findActiveForUpdate(25L)).thenReturn(Optional.of(otp));
+        when(otps.findFirstByUserIdAndUsedAtIsNullOrderByCreatedAtDesc(25L)).thenReturn(Optional.of(otp));
 
         assertThrows(IllegalArgumentException.class,
                 () -> service.resetPassword("student@example.test", "123456", "NewPass123"));

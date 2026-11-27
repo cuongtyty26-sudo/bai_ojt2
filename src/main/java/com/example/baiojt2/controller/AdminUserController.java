@@ -23,12 +23,14 @@ public class AdminUserController {
                        @RequestParam(defaultValue = "ALL") String role,
                        @RequestParam(defaultValue = "ALL") String status,
                        @RequestParam(defaultValue = "0") int page,
-                       @RequestParam(defaultValue = "10") int size, Model model,\n                       @AuthenticationPrincipal UserAccount admin) {
+                       @RequestParam(defaultValue = "10") int size, Model model,
+                       @AuthenticationPrincipal UserAccount admin) {
         Page<?> users = service.search(keyword, role, status, page, size);
         model.addAttribute("usersPage", users);
         model.addAttribute("keyword", keyword);
         model.addAttribute("selectedRole", role);
-        model.addAttribute("selectedStatus", status);\n        model.addAttribute("currentAdminId", admin.getId());
+        model.addAttribute("selectedStatus", status);
+        model.addAttribute("currentAdminId", admin.getId());
         model.addAttribute("createPartnerForm", new CreatePartnerForm());
         return "admin/users";
     }

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Thông tin dự án', ~{::content})}">
+<body>
+<section th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="h3 mb-4" th:text="${formTitle}">Thông tin dự án</h1>
+            <div th:if="${projectLimitError}" class="alert alert-danger" th:text="${projectLimitError}"></div>
+            <form th:action="${formAction}" th:object="${projectForm}" method="post" class="card shadow-sm">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Tên dự án <span class="text-danger">*</span></label>
+                        <input id="name" type="text" th:field="*{name}"
+                               th:classappend="${#fields.hasErrors('name')} ? ' is-invalid' : ''"
+                               class="form-control" maxlength="200" required>
+                        <div class="invalid-feedback" th:errors="*{name}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Vai trò của bạn <span class="text-danger">*</span></label>
+                        <input id="role" type="text" th:field="*{role}"
+                               th:classappend="${#fields.hasErrors('role')} ? ' is-invalid' : ''"
+                               class="form-control" maxlength="150" placeholder="Ví dụ: Backend Developer" required>
+                        <div class="invalid-feedback" th:errors="*{role}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="technologies" class="form-label">Công nghệ sử dụng <span class="text-danger">*</span></label>
+                        <input id="technologies" type="text" th:field="*{technologies}"
+                               th:classappend="${#fields.hasErrors('technologies')} ? ' is-invalid' : ''"
+                               class="form-control" maxlength="500" placeholder="Ví dụ: Java, Spring Boot, MySQL" required>
+                        <div class="invalid-feedback" th:errors="*{technologies}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="githubUrl" class="form-label">Link GitHub <span class="text-danger">*</span></label>
+                        <input id="githubUrl" type="url" th:field="*{githubUrl}"
+                               th:classappend="${#fields.hasErrors('githubUrl')} ? ' is-invalid' : ''"
+                               class="form-control" maxlength="500" placeholder="https://github.com/username/repository" required>
+                        <div class="invalid-feedback" th:errors="*{githubUrl}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="demoUrl" class="form-label">Link demo (tùy chọn)</label>
+                        <input id="demoUrl" type="url" th:field="*{demoUrl}"
+                               th:classappend="${#fields.hasErrors('demoUrl')} ? ' is-invalid' : ''"
+                               class="form-control" maxlength="500" placeholder="https://example.com">
+                        <div class="invalid-feedback" th:errors="*{demoUrl}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Mô tả dự án</label>
+                        <textarea id="description" th:field="*{description}"
+                                  th:classappend="${#fields.hasErrors('description')} ? ' is-invalid' : ''"
+                                  class="form-control" rows="5" maxlength="5000"
+                                  placeholder="Mục tiêu, chức năng chính và kết quả dự án..."></textarea>
+                        <div class="invalid-feedback" th:errors="*{description}"></div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white d-flex justify-content-end gap-2 p-3">
+                    <a class="btn btn-outline-secondary" th:href="@{/me/profile}">Hủy</a>
+                    <button type="submit" class="btn btn-primary">Lưu dự án</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Quản lý kỹ năng', ~{::content})}">
+<body>
+<section th:fragment="content">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">Quản lý kỹ năng</h1>
+            <p class="text-muted mb-0">Thêm, chỉnh sửa và quản lý trạng thái kỹ năng trong hệ thống.</p>
+        </div>
+        <a class="btn btn-primary" th:href="@{/admin/skills/new}">Thêm kỹ năng</a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>Tên kỹ năng</th>
+                    <th>Nhóm</th>
+                    <th>Đang được sử dụng</th>
+                    <th>Trạng thái</th>
+                    <th class="text-end">Thao tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="skill : ${skills}">
+                    <td class="fw-semibold" th:text="${skill.name}">Java</td>
+                    <td th:text="${skill.category.label}">Ngôn ngữ</td>
+                    <td th:text="${skill.usageCount}">0</td>
+                    <td>
+                        <span th:if="${skill.active}" class="badge text-bg-success">Đang hiển thị</span>
+                        <span th:unless="${skill.active}" class="badge text-bg-secondary">Đã ẩn</span>
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-end flex-wrap gap-2">
+                            <a class="btn btn-sm btn-outline-primary"
+                               th:href="@{/admin/skills/{id}/edit(id=${skill.id})}">Sửa</a>
+                            <form th:if="${skill.active}" th:action="@{/admin/skills/{id}/hide(id=${skill.id})}"
+                                  method="post" class="m-0"
+                                  onsubmit="return confirm('Bạn có chắc muốn ẩn kỹ năng này?');">
+                                <button class="btn btn-sm btn-outline-warning" type="submit">Ẩn</button>
+                            </form>
+                            <form th:unless="${skill.active}" th:action="@{/admin/skills/{id}/activate(id=${skill.id})}"
+                                  method="post" class="m-0">
+                                <button class="btn btn-sm btn-outline-success" type="submit">Hiện lại</button>
+                            </form>
+                            <form th:if="${skill.usageCount == 0}"
+                                  th:action="@{/admin/skills/{id}/delete(id=${skill.id})}"
+                                  method="post" class="m-0"
+                                  onsubmit="return confirm('Kỹ năng chưa được sử dụng. Bạn có chắc chắn muốn xóa vĩnh viễn?');">
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Xóa</button>
+                            </form>
+                            <span th:if="${skill.usageCount > 0}" class="small text-muted align-self-center">
+                                Đã có sinh viên sử dụng – chỉ được ẩn
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(skills)}">
+                    <td colspan="5" class="text-center text-muted py-4">Chưa có kỹ năng nào.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -71,6 +71,47 @@
                     <button type="submit" class="btn btn-primary">Lưu hồ sơ</button>
                 </div>
             </form>
+
+            <section class="mt-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h2 class="h4 mb-1">Học vấn</h2>
+                        <p class="text-muted mb-0">Các trường học và chuyên ngành của bạn.</p>
+                    </div>
+                    <a class="btn btn-primary" th:href="@{/me/educations/new}">Thêm học vấn</a>
+                </div>
+
+                <div th:if="${#lists.isEmpty(educations)}" class="alert alert-light border">
+                    Bạn chưa thêm thông tin học vấn nào.
+                </div>
+                <div th:each="education : ${educations}" class="card shadow-sm mb-3">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap justify-content-between gap-3">
+                            <div>
+                                <h3 class="h5 mb-1" th:text="${education.institution}">Tên trường</h3>
+                                <p class="mb-1" th:text="${education.major}">Chuyên ngành</p>
+                                <p class="text-muted small mb-1">
+                                    <span th:text="${education.startDate}">2020-04-01</span>
+                                    <span> – </span>
+                                    <span th:text="${education.endDate != null ? education.endDate : 'Hiện tại'}">Hiện tại</span>
+                                </p>
+                                <p th:if="${education.gpa != null}" class="small mb-0">
+                                    GPA: <strong th:text="${education.gpa}">3.50</strong> / 4.00
+                                </p>
+                            </div>
+                            <div class="d-flex align-items-start gap-2">
+                                <a class="btn btn-outline-primary btn-sm"
+                                   th:href="@{/me/educations/{id}/edit(id=${education.id})}">Sửa</a>
+                                <form th:action="@{/me/educations/{id}/delete(id=${education.id})}"
+                                      method="post" class="m-0"
+                                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa thông tin học vấn này?');">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Xóa</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 </section>

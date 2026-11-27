@@ -21,7 +21,10 @@
 <span class="badge bg-info text-dark ms-1" sec:authorize="hasRole('ADMIN')">ADMIN</span>
 <span class="badge bg-primary ms-1" sec:authorize="hasRole('PARTNER')">PARTNER</span>
 <span class="badge bg-success ms-1" sec:authorize="hasRole('STUDENT')">STUDENT</span></div>
-<a class="btn btn-outline-light btn-sm" sec:authorize="isAnonymous()" th:href="@{/login}">Đăng nhập</a>
+<div sec:authorize="isAnonymous()" class="d-flex gap-2">
+<a class="btn btn-outline-light btn-sm" th:href="@{/login}">Đăng nhập</a>
+<a class="btn btn-info btn-sm" th:href="@{/register}">Đăng ký</a>
+</div>
 <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" class="m-0"><button class="btn btn-outline-light btn-sm" type="submit">Đăng xuất</button></form>
 </div></div></div></nav>
 </header>

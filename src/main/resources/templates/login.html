@@ -16,6 +16,7 @@
         <h1 class="h4 text-center mb-2">Đăng nhập</h1>
         <p class="text-secondary text-center mb-4">Sử dụng email và mật khẩu tài khoản của bạn.</p>
 
+        <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
         <div th:if="${param.reason != null and param.reason[0] == 'locked'}" class="alert alert-danger" role="alert">
             Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên để được hỗ trợ.
         </div>
@@ -56,7 +57,8 @@
             <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
         </form>
         <p class="text-center text-secondary small mt-4 mb-0">
-            <a th:href="@{/}" class="text-decoration-none">Quay về trang chủ</a>
+            Chưa có tài khoản? <a th:href="@{/register}" class="text-decoration-none">Đăng ký ngay</a>
+            <span class="mx-1">·</span><a th:href="@{/}" class="text-decoration-none">Trang chủ</a>
         </p>
     </section>
 </main>

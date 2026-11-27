@@ -23,8 +23,7 @@ public class PasswordManagementService {
     private final PasswordResetOtpRepository otps;
     private final PasswordEncoder encoder;
 
-    public PasswordManagementService(UserAccountRepository users, PasswordResetOtpRepository otps,
-                                     PasswordEncoder encoder) {
+    public PasswordManagementService(UserAccountRepository users, PasswordResetOtpRepository otps, PasswordEncoder encoder) {
         this.users = users; this.otps = otps; this.encoder = encoder;
     }
 
@@ -32,9 +31,8 @@ public class PasswordManagementService {
     public void changePassword(UserAccount user, String currentPassword, String newPassword) {
         UserAccount account = users.findById(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản."));
-        if (!encoder.matches(currentPassword, account.getPassword())) {
+        if (!encoder.matches(currentPassword, account.getPassword()))
             throw new IllegalArgumentException("Mật khẩu hiện tại không chính xác.");
-        }
         account.changePasswordHash(encoder.encode(newPassword));
     }
 
@@ -51,7 +49,8 @@ public class PasswordManagementService {
         });
     }
 
-    @Transactional
+    // noRollbackFor is intentional: failed attempts and expiry invalidation must be committed.
+    @Transactional(noRollbackFor = IllegalArgumentException.class)
     public void resetPassword(String email, String code, String newPassword) {
         UserAccount user = users.findByEmailIgnoreCase(email.trim().toLowerCase(Locale.ROOT))
                 .orElseThrow(() -> new IllegalArgumentException("Email hoặc OTP không hợp lệ."));
@@ -63,7 +62,7 @@ public class PasswordManagementService {
         }
         if (otp.getAttempts() >= MAX_ATTEMPTS) {
             otp.invalidate();
-            throw new IllegalArgumentException("OTP đã bị khóa do nhập sai quá 5 lần.");
+            throw new IllegalArgumentException("OTP đã bị hủy do nhập sai quá 5 lần.");
         }
         if (!encoder.matches(code, otp.getOtpHash())) {
             otp.incrementAttempts();
